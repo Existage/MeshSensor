@@ -1,6 +1,6 @@
 //************************************************************
-// this is a simple example that uses the painlessMesh library and echos any
-// messages it receives
+// This code uses the painlessMesh library and returns 
+// 
 //
 //************************************************************
 #include "painlessMesh.h"
@@ -58,7 +58,7 @@ void loop() {
 
 void receivedCallback( uint32_t from, String &msg ) {
   Serial.printf("echoNode: Received from %u msg=%s\n", from, msg.c_str());
-  if(from == 309512273){ //so that base station triggers data send
+  if(from == 309512273){ //so that base station triggers data send. Change to base station ID if different
     Serial.println("Ack");
     String readings = dataFetch();
     Serial.println(readings);
