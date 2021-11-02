@@ -1,7 +1,7 @@
 //************************************************************
 // This code uses the painlessMesh library and returns 
-// 
-//
+// readings from sensors to mesh controller node.
+// Adapted from painlessMesh echo example
 //************************************************************
 #include "painlessMesh.h"
 #include <SD_ZH03B.h>       //needed for mesh
