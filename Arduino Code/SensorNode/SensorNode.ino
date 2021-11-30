@@ -70,7 +70,7 @@ void setupSensors(){
   Serial_2.begin(BAUDRATE,SERIAL_8N1, RXD2, TXD2);                               // (Uno example) device to MH-Z19 serial start   
   myMHZ19.begin(Serial_2);                                // *Serial(Stream) refence must be passed to library begin(). 
 
-  myMHZ19.autoCalibration();                              // Turn auto calibration ON (OFF autoCalibration(false))
+  myMHZ19.autoCalibration(false);                              // Turn auto calibration ON (OFF autoCalibration(false))
 
 
   Serial_1.begin(BAUDRATE,SERIAL_8N1, RXD1, TXD1);
