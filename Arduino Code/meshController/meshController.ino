@@ -12,13 +12,16 @@
 #define   MESH_PASSWORD   "verysecure"
 #define   MESH_PORT       5555
 
+int sampleTime = 10; // default to sample every 10 seconds
+int incomingVal = 10; // for incoming serial data
+
 Scheduler userScheduler; // to control your personal task
 painlessMesh  mesh;
 
 // User stub
 void sendMessage() ; // Prototype so PlatformIO doesn't complain
 
-Task taskSendMessage( TASK_SECOND * 5 , TASK_FOREVER, &sendMessage );
+Task taskSendMessage( TASK_SECOND * sampleTime , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
   String msg = "send";
@@ -26,6 +29,21 @@ void sendMessage() {
   mesh.sendBroadcast( msg );
   
 }
+
+Task taskSetSampleRate(TASK_SECOND , TASK_FOREVER, &setSampleTime );
+
+void setSampleTime(){
+  //Serial.println(Serial.available());
+  if (Serial.available() > 0) {
+    // read the incoming byte:
+    incomingVal = Serial.parseInt();
+    if (incomingVal > 0 && incomingVal < 601){ //expecting int time in seconds greater than 0 and less that 601= 10 min
+      taskSendMessage.setInterval(incomingVal * TASK_SECOND);
+      //Serial.printf("Sample rate set to %d seconds \n", sampleTime);
+      }
+    }
+    
+  }
 
 // Needed for painless library
 void receivedCallback( uint32_t from, String &msg ) {
@@ -57,7 +75,9 @@ void setup() {
   mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
   userScheduler.addTask( taskSendMessage );
+  userScheduler.addTask( taskSetSampleRate );
   taskSendMessage.enable();
+  taskSetSampleRate.enable();
 }
 
 void loop() {
